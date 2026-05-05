@@ -35,6 +35,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(-1, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CollisionShape2D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_4flbx"]
 resource_name = "Run Left"
@@ -94,6 +106,72 @@ tracks/1/keys = {
 "values": [Vector2(0, 0), Vector2(0, 0), Vector2(-10, 0), Vector2(-10, 0), Vector2(-10, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_1jxqw"]
+resource_name = "jump_mid_right"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CollisionShape2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.3962634]
+}
+
+[sub_resource type="Animation" id="Animation_2hs0m"]
+resource_name = "jump_right_start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1e-05),
+"update": 1,
+"values": [9]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1e-05),
+"update": 0,
+"values": [Vector2(-1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CollisionShape2D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.1344640137963142]
+}
+
 [sub_resource type="Animation" id="Animation_hqtel"]
 resource_name = "still_left"
 length = 0.001
@@ -131,12 +209,20 @@ _data = {
 &"RESET": SubResource("Animation_onrkg"),
 &"Run Left": SubResource("Animation_4flbx"),
 &"Run Right": SubResource("Animation_i3pqv"),
+&"jump_mid_right": SubResource("Animation_1jxqw"),
+&"jump_right_start": SubResource("Animation_2hs0m"),
 &"still_left": SubResource("Animation_hqtel"),
 &"still_right": SubResource("Animation_sweqy")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2hs0m"]
 animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sweqy"]
+animation = &"jump_mid_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b26j0"]
+animation = &"jump_right_start"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3pqv"]
 animation = &"still_left"
@@ -191,11 +277,25 @@ advance_mode = 2
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u1c27"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_op7ga"]
+xfade_time = 0.1
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_onrkg"]
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_onrkg"]
 states/End/position = Vector2(852, 100)
 states/RESET/node = SubResource("AnimationNodeAnimation_2hs0m")
 states/RESET/position = Vector2(298, 100)
 states/Start/position = Vector2(195, 100)
+states/jump_mid_right/node = SubResource("AnimationNodeAnimation_sweqy")
+states/jump_mid_right/position = Vector2(957, -16)
+states/jump_right_start/node = SubResource("AnimationNodeAnimation_b26j0")
+states/jump_right_start/position = Vector2(747, -16)
 states/still_left/node = SubResource("AnimationNodeAnimation_1jxqw")
 states/still_left/position = Vector2(446, 120)
 "states/still_left 2/node" = SubResource("AnimationNodeAnimation_i3pqv")
@@ -208,8 +308,8 @@ states/walk_left/node = SubResource("AnimationNodeAnimation_4flbx")
 states/walk_left/position = Vector2(561, 120)
 states/walk_right/node = SubResource("AnimationNodeAnimation_onrkg")
 states/walk_right/position = Vector2(566, 50)
-transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_b26j0"), "RESET", "still_right", SubResource("AnimationNodeStateMachineTransition_n7ghd"), "RESET", "still_left", SubResource("AnimationNodeStateMachineTransition_nvl01"), "still_right", "walk_right", SubResource("AnimationNodeStateMachineTransition_ivps1"), "still_left", "walk_left", SubResource("AnimationNodeStateMachineTransition_urp6f"), "still_right", "still_right 2", SubResource("AnimationNodeStateMachineTransition_sweqy"), "still_right 2", "still_right", SubResource("AnimationNodeStateMachineTransition_2hs0m"), "still_left", "still_left 2", SubResource("AnimationNodeStateMachineTransition_1jxqw"), "still_left 2", "still_left", SubResource("AnimationNodeStateMachineTransition_dw050"), "walk_right", "End", SubResource("AnimationNodeStateMachineTransition_bwjto"), "walk_left", "End", SubResource("AnimationNodeStateMachineTransition_606se")]
-graph_offset = Vector2(-144, -35)
+transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_b26j0"), "RESET", "still_right", SubResource("AnimationNodeStateMachineTransition_n7ghd"), "RESET", "still_left", SubResource("AnimationNodeStateMachineTransition_nvl01"), "still_right", "walk_right", SubResource("AnimationNodeStateMachineTransition_ivps1"), "still_left", "walk_left", SubResource("AnimationNodeStateMachineTransition_urp6f"), "still_right", "still_right 2", SubResource("AnimationNodeStateMachineTransition_sweqy"), "still_right 2", "still_right", SubResource("AnimationNodeStateMachineTransition_2hs0m"), "still_left", "still_left 2", SubResource("AnimationNodeStateMachineTransition_1jxqw"), "still_left 2", "still_left", SubResource("AnimationNodeStateMachineTransition_dw050"), "walk_right", "End", SubResource("AnimationNodeStateMachineTransition_bwjto"), "walk_left", "End", SubResource("AnimationNodeStateMachineTransition_606se"), "walk_right", "jump_right_start", SubResource("AnimationNodeStateMachineTransition_u1c27"), "jump_right_start", "jump_mid_right", SubResource("AnimationNodeStateMachineTransition_op7ga"), "jump_mid_right", "End", SubResource("AnimationNodeStateMachineTransition_onrkg")]
+graph_offset = Vector2(64, -47)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1170587640]
 script = ExtResource("1_onrkg")
@@ -236,4 +336,4 @@ tree_root = SubResource("AnimationNodeStateMachine_onrkg")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1794139223]
-position = Vector2(-8, 25)
+position = Vector2(0, 21)

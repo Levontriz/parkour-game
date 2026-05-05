@@ -27,7 +27,7 @@ func _physics_process(delta):
 	# 2. Jump Input
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-		playback.travel("jump_start_" + last_direction) # Uses direction for jump too
+		playback.travel("jump_" + last_direction + "_start") # Uses direction for jump too
 
 	update_animation_states()
 	move_and_slide()
