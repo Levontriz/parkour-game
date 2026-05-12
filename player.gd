@@ -1,47 +1,73 @@
 extends CharacterBody2D
 
-const SPEED = 300.0
-const ACCEL = 1500.0
-const FRICTION = 1200.0
-const JUMP_VELOCITY = -450.0
+@export var SPEED = 300.0
+@export var ACCEL = 1500.0
+@export var FRICTION = 1200.0
+@export var JUMP_VELOCITY = -450.0
+@export var DASH_VELOCITY = 800.0
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-var last_direction = "right" # Keeps track of facing direction
+var can_jump = true
+var can_dash = true
+var was_on_floor = false
+var was_airborne = false
+var horz_direction
+var vert_direction
 
-@onready var anim_tree = $AnimationTree
-@onready var playback = anim_tree.get("parameters/playback")
-@onready var ground_ray = $RayCast2D
+@onready var jump_timer : Timer = $JumpFrames
+@onready var animation_tree : AnimationTree = $AnimationTree
+
+func set_anim(condition: String, value: bool) -> void:
+	animation_tree.set("parameters/conditions/" + condition, value)
 
 func _physics_process(delta):
+	# 1. Gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# 1. Handle Horizontal Movement & Direction Tracking
-	var direction = Input.get_axis("Left", "Right")
-	if direction != 0:
-		velocity.x = move_toward(velocity.x, direction * SPEED, ACCEL * delta)
-		last_direction = "right" if direction > 0 else "left"
+	# 2. Coyote Time & Floor State
+	if is_on_floor():
+		can_dash = true
+		if not was_on_floor:
+			can_jump = true
+		was_on_floor = true
+	elif was_on_floor:
+		jump_timer.start()
+		was_on_floor = false
+
+	# 3. Landing Detection
+	if was_airborne and is_on_floor():
+		set_anim("is_landing", true)
+	was_airborne = not is_on_floor()
+
+	# 4. Horizontal Movement
+	horz_direction = Input.get_axis("Left", "Right")
+	vert_direction = Input.get_axis("Up", "Down")
+
+	if horz_direction != 0:
+		velocity.x = move_toward(velocity.x, horz_direction * SPEED, ACCEL * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0, FRICTION * delta)
 
-	# 2. Jump Input
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		playback.travel("jump_" + last_direction + "_start") # Uses direction for jump too
+	# 5. Animation
+	set_anim("is_moving_left",  horz_direction < 0)
+	set_anim("is_moving_right", horz_direction > 0)
+	set_anim("is_stationary",   is_zero_approx(horz_direction))
+	set_anim("is_airborne",     not is_on_floor())
 
-	update_animation_states()
+	# 6. Jump
+	if Input.is_action_just_pressed("Jump") and can_jump:
+		can_jump = false
+		velocity.y = JUMP_VELOCITY
+
+	# 7. Dash
+	if Input.is_action_just_pressed("Jump") and can_dash and not is_on_floor():
+		can_dash = false
+		velocity.y += DASH_VELOCITY * vert_direction
+		velocity.x += DASH_VELOCITY * horz_direction
+		set_anim("is_dashing", true)
+
 	move_and_slide()
 
-func update_animation_states():
-	if is_on_floor():
-		if velocity.x != 0:
-			playback.travel("walk_" + last_direction) # Plays "walk_left" or "walk_right"
-		else:
-			playback.travel("still_" + last_direction)
-	else:
-		# Mid-air/Falling logic
-		if velocity.y > 0:
-			if ground_ray.is_colliding():
-				playback.travel("roll_" + last_direction)
-			else:
-				playback.travel("jump_mid_" + last_direction)
+func _on_jump_frames_timeout() -> void:
+	can_jump = false

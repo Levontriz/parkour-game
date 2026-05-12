@@ -44,60 +44,6 @@ tracks/1/keys = {
 "values": [Vector2(-3, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_hqtel"]
-resource_name = "Jump_Left"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [15]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(3, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_b26j0"]
-resource_name = "Jump_Right"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [16]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-3, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_2hs0m"]
 length = 0.001
 tracks/0/type = "value"
@@ -186,8 +132,6 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b26j0"]
 _data = {
 &"Idle": SubResource("Animation_sweqy"),
-&"Jump_Left": SubResource("Animation_hqtel"),
-&"Jump_Right": SubResource("Animation_b26j0"),
 &"RESET": SubResource("Animation_2hs0m"),
 &"Run_Left": SubResource("Animation_1jxqw"),
 &"Run_Right": SubResource("Animation_dw050")
@@ -195,12 +139,6 @@ _data = {
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hqtel"]
 animation = &"Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n7ghd"]
-animation = &"Jump_Left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nvl01"]
-animation = &"Jump_Right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sweqy"]
 animation = &"Run_Left"
@@ -227,42 +165,17 @@ advance_condition = &"is_moving_right"
 advance_mode = 2
 advance_condition = &"is_stationary"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hqtel"]
-advance_mode = 2
-advance_condition = &"is_moving_right"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sweqy"]
-advance_mode = 2
-advance_condition = &"is_moving_left"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ivps1"]
-advance_mode = 2
-advance_condition = &"is_moving_left"
-advance_expression = "is_moving_left and !is_airborne"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_urp6f"]
-advance_mode = 2
-advance_expression = "is_moving_left and is_airborne"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2hs0m"]
-advance_mode = 2
-advance_expression = "(horz_direction > 0) and (not is_on_floor())"
-
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_n7ghd"]
 states/End/position = Vector2(1086, 159)
 states/Idle/node = SubResource("AnimationNodeAnimation_hqtel")
 states/Idle/position = Vector2(354, 90)
-states/Jump_Left/node = SubResource("AnimationNodeAnimation_n7ghd")
-states/Jump_Left/position = Vector2(633, 25)
-states/Jump_Right/node = SubResource("AnimationNodeAnimation_nvl01")
-states/Jump_Right/position = Vector2(679, 215)
 states/Run_Left/node = SubResource("AnimationNodeAnimation_sweqy")
 states/Run_Left/position = Vector2(497, 25)
 states/Run_Right/node = SubResource("AnimationNodeAnimation_2hs0m")
-states/Run_Right/position = Vector2(497, 215)
+states/Run_Right/position = Vector2(497, 159)
 states/Start/position = Vector2(202, 100)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_1jxqw"), "Idle", "Run_Left", SubResource("AnimationNodeStateMachineTransition_dw050"), "Run_Left", "Idle", SubResource("AnimationNodeStateMachineTransition_b26j0"), "Idle", "Run_Right", SubResource("AnimationNodeStateMachineTransition_n7ghd"), "Run_Right", "Idle", SubResource("AnimationNodeStateMachineTransition_nvl01"), "Run_Left", "Run_Right", SubResource("AnimationNodeStateMachineTransition_hqtel"), "Run_Right", "Run_Left", SubResource("AnimationNodeStateMachineTransition_sweqy"), "Jump_Left", "Run_Left", SubResource("AnimationNodeStateMachineTransition_ivps1"), "Run_Left", "Jump_Left", SubResource("AnimationNodeStateMachineTransition_urp6f"), "Run_Right", "Jump_Right", SubResource("AnimationNodeStateMachineTransition_2hs0m")]
-graph_offset = Vector2(-30, 37)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_1jxqw"), "Idle", "Run_Left", SubResource("AnimationNodeStateMachineTransition_dw050"), "Run_Left", "Idle", SubResource("AnimationNodeStateMachineTransition_b26j0"), "Idle", "Run_Right", SubResource("AnimationNodeStateMachineTransition_n7ghd"), "Run_Right", "Idle", SubResource("AnimationNodeStateMachineTransition_nvl01")]
+graph_offset = Vector2(103, -17)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1170587640]
 script = ExtResource("1_onrkg")

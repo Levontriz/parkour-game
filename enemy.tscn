@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://l8v3qux5e14q"]
+
+[ext_resource type="Script" uid="uid://bc3hrwj58c4eb" path="res://enemy.gd" id="1_epg4t"]
+[ext_resource type="Texture2D" uid="uid://c5qx0hpdhbjbi" path="res://icon.svg" id="1_qi2p4"]
+[ext_resource type="PackedScene" uid="uid://5drarggt58ku" path="res://hitbox.tscn" id="2_iifgy"]
+[ext_resource type="PackedScene" uid="uid://dcsw2fkgx3ynb" path="res://attack_box.tscn" id="3_epg4t"]
+[ext_resource type="Script" uid="uid://bhwycm5jbg0q8" path="res://vital_resource.gd" id="4_iifgy"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3yqyl"]
+radius = 58.0
+height = 156.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wujgv"]
+radius = 45.0
+height = 122.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iifgy"]
+radius = 552.5244
+
+[node name="Enemy" type="CharacterBody2D" unique_id=305604425]
+scale = Vector2(0.391, 0.391)
+collision_layer = 0
+script = ExtResource("1_epg4t")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1381377897]
+scale = Vector2(1, 1.2578125)
+texture = ExtResource("1_qi2p4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=214504989]
+shape = SubResource("CapsuleShape2D_3yqyl")
+
+[node name="hitbox" parent="." unique_id=492842552 node_paths=PackedStringArray("health_resource") instance=ExtResource("2_iifgy")]
+collision_layer = 4
+health_resource = NodePath("../Health")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox" unique_id=1015571564]
+shape = SubResource("CapsuleShape2D_wujgv")
+
+[node name="attack_box" parent="." unique_id=1807059092 instance=ExtResource("3_epg4t")]
+collision_layer = 8
+collision_mask = 16
+damage = 10.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="attack_box" unique_id=1387372058]
+shape = SubResource("CapsuleShape2D_wujgv")
+
+[node name="Health" type="Node" parent="." unique_id=25461988]
+script = ExtResource("4_iifgy")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=2136185288]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1925826855]
+shape = SubResource("CircleShape2D_iifgy")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

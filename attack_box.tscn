@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dcsw2fkgx3ynb"]
+
+[ext_resource type="Script" uid="uid://cxxovwb52dusj" path="res://attack_box.gd" id="1_87bg2"]
+
+[node name="attack_box" type="Area2D" unique_id=1807059092]
+collision_layer = 32
+collision_mask = 4
+script = ExtResource("1_87bg2")
+damage = null
