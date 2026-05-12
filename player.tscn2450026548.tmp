@@ -183,34 +183,6 @@ tracks/1/keys = {
 "values": [Vector2(-8, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_n7ghd"]
-resource_name = "mid_jump_right"
-length = 4.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.033333335),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-8, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b26j0"]
 _data = {
 &"Idle": SubResource("Animation_sweqy"),
@@ -218,8 +190,7 @@ _data = {
 &"Jump_Right": SubResource("Animation_b26j0"),
 &"RESET": SubResource("Animation_2hs0m"),
 &"Run_Left": SubResource("Animation_1jxqw"),
-&"Run_Right": SubResource("Animation_dw050"),
-&"mid_jump_right": SubResource("Animation_n7ghd")
+&"Run_Right": SubResource("Animation_dw050")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hqtel"]
@@ -311,7 +282,7 @@ states/Run_Right/node = SubResource("AnimationNodeAnimation_2hs0m")
 states/Run_Right/position = Vector2(497, 215)
 states/Start/position = Vector2(202, 100)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_1jxqw"), "Idle", "Run_Left", SubResource("AnimationNodeStateMachineTransition_dw050"), "Run_Left", "Idle", SubResource("AnimationNodeStateMachineTransition_b26j0"), "Idle", "Run_Right", SubResource("AnimationNodeStateMachineTransition_n7ghd"), "Run_Right", "Idle", SubResource("AnimationNodeStateMachineTransition_nvl01"), "Run_Left", "Run_Right", SubResource("AnimationNodeStateMachineTransition_hqtel"), "Run_Right", "Run_Left", SubResource("AnimationNodeStateMachineTransition_sweqy"), "Jump_Left", "Run_Left", SubResource("AnimationNodeStateMachineTransition_ivps1"), "Run_Left", "Jump_Left", SubResource("AnimationNodeStateMachineTransition_urp6f"), "Run_Right", "Jump_Right", SubResource("AnimationNodeStateMachineTransition_2hs0m"), "Jump_Right", "Run_Right", SubResource("AnimationNodeStateMachineTransition_bwjto"), "Jump_Right", "Idle", SubResource("AnimationNodeStateMachineTransition_606se"), "Jump_Left", "Idle", SubResource("AnimationNodeStateMachineTransition_u1c27"), "Jump_Left", "Jump_Right", SubResource("AnimationNodeStateMachineTransition_op7ga"), "Jump_Right", "Jump_Left", SubResource("AnimationNodeStateMachineTransition_q13i1")]
-graph_offset = Vector2(155, 8)
+graph_offset = Vector2(33, 2)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1170587640]
 script = ExtResource("1_onrkg")
@@ -341,7 +312,7 @@ wait_time = 0.3
 one_shot = true
 
 [node name="DashLength" type="Timer" parent="." unique_id=1445873361]
-wait_time = 0.2
+wait_time = 0.3
 one_shot = true
 
 [node name="Health" type="Node" parent="." unique_id=1807107560]
@@ -353,7 +324,6 @@ initial_value = 10.0
 libraries/ = SubResource("AnimationLibrary_b26j0")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=750377930]
-active = false
 tree_root = SubResource("AnimationNodeStateMachine_n7ghd")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/is_grounded_left = false
